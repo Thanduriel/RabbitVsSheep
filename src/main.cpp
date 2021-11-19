@@ -3,6 +3,8 @@
 
 int main()
 {
-	game::Game game;
-	game.run(std::make_unique<rvs::GSPlay>());
+	using namespace game;
+
+	Game game;
+	game.run(std::make_unique<GSPlay>());
 }

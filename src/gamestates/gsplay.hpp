@@ -5,9 +5,9 @@
 #include <engine/input/inputmanager.hpp>
 #include <engine/graphics/camera.hpp>
 
-namespace rvs {
+namespace game {
 
-	class GSPlay : public game::GameState
+	class GSPlay : public GameState
 	{
 	public:
 		GSPlay();
@@ -16,7 +16,7 @@ namespace rvs {
 		void draw(float _deltaTime) override;
 
 	private:
-		game::World<graphics::Camera> m_world;
+		World<graphics::Camera> m_world;
 
 		std::unique_ptr<input::InputInterface> m_inputs;
 	};
