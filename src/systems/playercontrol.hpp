@@ -41,7 +41,8 @@ namespace systems {
 			WriteAccess<components::PlayerController>,
 			WriteAccess<components::Model>,
 			WriteAccess<components::Transform>,
-			WriteAccess<components::SphereCollider>>;
+			WriteAccess<components::SphereCollider>,
+			WriteAccess<components::AreaRestriction>>;
 		void update(Components _comps, EntityCreator& _creator) const;
 	private:
 		graphics::Mesh m_mesh;

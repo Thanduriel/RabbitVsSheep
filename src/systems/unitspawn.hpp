@@ -21,7 +21,8 @@ namespace systems{
 			, WriteAccess<components::Velocity>
 			, WriteAccess<components::Transform>
 			, WriteAccess<components::Model>
-			, WriteAccess<components::SphereCollider>>;
+			, WriteAccess<components::SphereCollider>
+			, WriteAccess<components::AreaRestriction>>;
 
 		void update(Components _comps, float _deltaTime, EntityCreator& _creator);
 	private:

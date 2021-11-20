@@ -15,7 +15,8 @@ namespace systems{
 			, components::Velocity& velocity)
 			{
 				const math::AABB3D& area = m_areas[static_cast<size_t>(restriction.area)];
-
+				if (!area.isIn(position.value))
+					velocity.value = glm::vec3(0.f);
 			});
 	}
 }

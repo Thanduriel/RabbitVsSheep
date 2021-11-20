@@ -13,6 +13,7 @@ namespace systems{
 	{
 	public:
 		MapBoundary(std::vector<math::AABB3D> _areas);
+
 		using Components = ComponentTuple<
 			ReadAccess<components::Position>
 			, WriteAccess<components::Velocity>

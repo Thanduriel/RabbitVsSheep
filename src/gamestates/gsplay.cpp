@@ -4,6 +4,7 @@
 #include "../systems/physics.hpp"
 #include "../systems/particledrawing.hpp"
 #include "../systems/playercontrol.hpp"
+#include "../systems/mapboundary.hpp"
 #include <engine/game/systems/transforms.hpp>
 #include <engine/graphics/core/device.hpp>
 #include <engine/utils/config.hpp>
@@ -43,6 +44,9 @@ namespace game {
 		m_world.addSystem(std::make_unique<systems::Transforms>(), SystemGroup::Process);
 		m_world.addSystem(std::make_unique<systems::UnitSpawn>(2.f), SystemGroup::Process);
 		m_world.addSystem(std::make_unique <systems::PlayerControl>(), SystemGroup::Process);
+		m_world.addSystem(std::make_unique<systems::MapBoundary>(
+			std::vector{ math::AABB3D(glm::vec3(-40.f), glm::vec3(20.f)) }
+			), SystemGroup::Process);
 
 		m_world.getResource<graphics::Camera>().setView(
 			glm::lookAt(glm::vec3(0.f, 0.f, 50.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f)));

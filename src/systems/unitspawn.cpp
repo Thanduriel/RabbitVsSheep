@@ -34,7 +34,8 @@ namespace systems {
 					.add<comps::Rotation>(math::random::rotation())
 					.add<comps::Velocity>(math::random::direction())
 					.add<comps::Transform>(glm::identity<glm::mat4>())
-					.add<comps::SphereCollider>(1.f, CollisionType::Enemy);
+					.add<comps::SphereCollider>(1.f, CollisionType::Enemy)
+					.add<comps::AreaRestriction>(comps::AreaRestriction::Areas::Left);
 				//	.add<comps::Model>(m_mesh, texture, glm::identity<glm::mat4>());
 			}
 		}

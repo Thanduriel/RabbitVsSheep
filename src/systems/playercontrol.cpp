@@ -29,7 +29,8 @@ namespace systems {
 				.add<comps::PlayerController>(m_inputs1)
 				.add<comps::Transform>()
 				.add<comps::Model>(m_mesh, texture, glm::identity<glm::mat4>())
-				.add<comps::SphereCollider>(1.f, CollisionType::Player);
+				.add<comps::SphereCollider>(1.f, CollisionType::Player)
+				.add<comps::AreaRestriction>(comps::AreaRestriction::Areas::Left);
 		}
 	}
 
