@@ -33,15 +33,21 @@ namespace systems {
 		}
 	}
 
-	void PlayerControl::update(Components _comps) const
+	void PlayerControl::update(Components _comps, float _deltaTime) const
 	{
 		using namespace input;
-		_comps.execute([](const components::PlayerController& _controller
-			, components::Velocity& _veloctiy)
+		_comps.execute([&](const components::PlayerController& _controller
+			, components::Velocity& _velocity)
 			{
 				const InputInterface& inp = *_controller.inputs;
+
+				// acceleration based on player input
 				glm::vec2 direction(inp.getAxis(Axes::MOVE_L_R), -inp.getAxis(Axes::MOVE_U_D));
-				_veloctiy.value = glm::vec3(direction * 8.f, 0.f);
+				_velocity.value += glm::vec3(direction * 256.f * _deltaTime, 0.f);
+
+				// dampening proportional to current speed
+				constexpr float dampCoef = 0.1f;
+				_velocity.value *= 1.f - dampCoef * _deltaTime * glm::dot(_velocity.value, _velocity.value);
 			});
 	}
 

@@ -21,5 +21,16 @@ namespace components{
 		CollisionType type;
 		float radius;
 	};
+
+	struct AreaRestriction
+	{
+		enum struct Areas
+		{
+			Left, Right, COUNT
+		};
+		explicit AreaRestriction(Areas _area) : area(_area) {}
+
+		Areas area;
+	};
 }
 }

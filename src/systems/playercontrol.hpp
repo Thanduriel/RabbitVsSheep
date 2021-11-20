@@ -55,7 +55,7 @@ namespace systems {
 		using Components = ComponentTuple<
 			WriteAccess<components::Velocity>,
 			ReadAccess<components::PlayerController>>;
-		void update(Components _comps) const;
+		void update(Components _comps, float _deltaTime) const;
 	private:
 	};
 }
