@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../components/collider.hpp"
 #include <engine/game/core/componentaccess.hpp>
 #include <engine/game/core/lifetimeManager2.hpp>
 #include <engine/game/components/simpleComponents.hpp>
@@ -19,7 +20,8 @@ namespace systems{
 			, WriteAccess<components::Rotation>
 			, WriteAccess<components::Velocity>
 			, WriteAccess<components::Transform>
-			, WriteAccess<components::Model>>;
+			, WriteAccess<components::Model>
+			, WriteAccess<components::SphereCollider>>;
 
 		void update(Components _comps, float _deltaTime, EntityCreator& _creator);
 	private:

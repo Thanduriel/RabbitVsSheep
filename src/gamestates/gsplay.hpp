@@ -18,6 +18,7 @@ namespace game {
 	private:
 		World<graphics::Camera> m_world;
 
-		std::unique_ptr<input::InputInterface> m_inputs;
+		std::unique_ptr<input::InputInterface> m_inputs1;
+		std::unique_ptr<input::InputInterface> m_inputs2;
 	};
 }

@@ -2,6 +2,7 @@
 #include "../graphics/resources.hpp"
 #include <engine/utils/meshLoader.hpp>
 #include <engine/graphics/resources.hpp>
+#include <engine/math/random.hpp>
 
 namespace game {
 namespace systems {
@@ -30,10 +31,11 @@ namespace systems {
 
 				CreateComponents(_comps, _creator.create())
 					.add<comps::Position>(glm::vec3(0.f))
-					.add<comps::Rotation>(glm::identity<glm::quat>())
-					.add<comps::Velocity>(glm::vec3(1.f * i))
+					.add<comps::Rotation>(math::random::rotation())
+					.add<comps::Velocity>(math::random::direction())
 					.add<comps::Transform>(glm::identity<glm::mat4>())
-					.add<comps::Model>(m_mesh, texture, glm::identity<glm::mat4>());
+					.add<comps::SphereCollider>(1.f, CollisionType::Enemy);
+				//	.add<comps::Model>(m_mesh, texture, glm::identity<glm::mat4>());
 			}
 		}
 	}
