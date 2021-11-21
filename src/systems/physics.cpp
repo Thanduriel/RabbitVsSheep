@@ -12,8 +12,45 @@ namespace systems {
 	void Physics::update(Components _comps, float _deltaTime, SceneGraph& _sceneGraph)
 	{
 		namespace comps = components;
+		// dampening proportional to current speed
+		_comps.execute([&](components::Velocity& vel)
+			{
+				constexpr float dampCoef = 0.1f;
+				vel.value *= 1.f - dampCoef * _deltaTime * glm::dot(vel.value, vel.value);
+			});
+
+		// orientation according to velocity
+		// todo: move into extra system?
+		_comps.execute([&](components::AngularVelocity& angVel
+			, const components::Velocity& vel
+			, const components::Rotation& rot)
+			{
+				mat3 rotMat = static_cast<mat3>(rot.value);
+				const vec3 forward = rotMat * vec3(0.f, 1.f, 0.f);
+				const float speed = length(vel.value);
+				spdlog::info("{}", angVel.speed);
+				if (speed > 0.001f)
+				{
+					const vec3 dir = vel.value / speed;
+					if (const float angle = std::acos(dot(forward, dir)); angle > 0.001f)
+					{
+						const vec3 axis = normalize(cross(forward, dir));
+						angVel.axis = axis;
+						angVel.speed = angle * angle * 3.f + angle * 1.f + 2.f;
+						if (angVel.speed * _deltaTime >= angle)
+						{
+							angVel.speed = angle / _deltaTime * 0.5f;
+						}
+					}
+					else
+						angVel.speed = 0.f;
+				}
+				else
+					angVel.speed = 0.f;
+			});
 
 		_comps.execute(operations::ApplyVelocity(_deltaTime));
+		_comps.execute(operations::ApplyAngularVelocity(_deltaTime));
 		_comps.execute([&](Entity ent, const components::Velocity&)
 			{
 				getComp<components::TransformNeedsUpdate>(_comps).add(ent);
@@ -42,7 +79,7 @@ namespace systems {
 				{
 					const Entity oth = el.entity;
 					// do not test colliders of the same entity
-					if (_ent == oth)
+					if (_ent == oth || _collider.type == el.type)
 						return;
 
 					//	HitInfo info;

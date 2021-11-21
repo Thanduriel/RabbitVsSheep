@@ -5,7 +5,7 @@
 
 namespace graphics {
 
-	constexpr std::array<VertexAttribute, 3> vertexAttributes = { {
+	static constexpr std::array<VertexAttribute, 3> vertexAttributes = { {
 		{PrimitiveFormat::FLOAT, 3, false, false},
 		{PrimitiveFormat::FLOAT, 4, false, false},
 		{PrimitiveFormat::FLOAT, 1, false, false}

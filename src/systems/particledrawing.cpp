@@ -14,5 +14,17 @@ namespace systems{
 
 		m_renderer.present(_camera);
 	}
+
+	void LineDrawing::update(Components _comps, const graphics::Camera& _camera)
+	{
+		m_renderer.clear();
+
+		_comps.execute([&](const components::Ray& ray, const components::Position& pos)
+			{
+				m_renderer.draw(pos.value, ray.target, ray.color, ray.thickness);
+			});
+
+		m_renderer.present(_camera);
+	}
 }
 }

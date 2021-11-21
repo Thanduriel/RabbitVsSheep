@@ -49,8 +49,10 @@ namespace systems {
 		using Components = ComponentTuple<
 			WriteAccess<components::Position>
 			, WriteAccess<components::Velocity>
+			, WriteAccess<components::Rotation>
 			, ReadAccess<components::SphereCollider>
-			, WriteAccess<components::TransformNeedsUpdate>>;
+			, WriteAccess<components::TransformNeedsUpdate>
+			, ReadAccess<components::AngularVelocity>>;
 
 		void update(Components _comps, float _deltaTime, SceneGraph& _sceneGraph);
 	};

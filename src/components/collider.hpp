@@ -18,8 +18,8 @@ namespace components{
 		SphereCollider(float _radius, CollisionType _type) 
 			: radius(_radius), type(_type) {}
 
-		CollisionType type;
 		float radius;
+		CollisionType type;
 	};
 
 	struct AreaRestriction

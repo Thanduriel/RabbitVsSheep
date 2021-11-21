@@ -2,6 +2,7 @@
 
 #include "../components/player.hpp"
 #include "../components/collider.hpp"
+#include "mapboundary.hpp"
 #include <engine/game/core/componentaccess.hpp>
 #include <engine/game/components/simpleComponents.hpp>
 #include <engine/game/components/model.hpp>
@@ -42,8 +43,10 @@ namespace systems {
 			WriteAccess<components::Model>,
 			WriteAccess<components::Transform>,
 			WriteAccess<components::SphereCollider>,
-			WriteAccess<components::AreaRestriction>>;
-		void update(Components _comps, EntityCreator& _creator) const;
+			WriteAccess<components::AreaRestriction>,
+			WriteAccess<components::Scale>,
+			WriteAccess<components::AngularVelocity>>;
+		void update(Components _comps, EntityCreator& _creator, const MapBoundaries& _boundaries) const;
 	private:
 		graphics::Mesh m_mesh;
 		const input::InputInterface& m_inputs1;

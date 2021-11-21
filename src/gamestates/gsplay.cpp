@@ -39,20 +39,27 @@ namespace game {
 				{"castPrimary", MouseButton::LEFT} },
 				{ {Actions::MOVE_LEFT, Actions::MOVE_RIGHT}, {Actions::MOVE_UP, Actions::MOVE_DOWN} }));
 
+		constexpr float mapX = 30.f;
+		constexpr float mapY = 40.f / 2.f;
+		constexpr float voidZone = 5.f;
+		m_world.addResource<MapBoundaries>(std::vector{ 
+			math::AABB3D(glm::vec3(-voidZone - mapX, -mapY, -5.f), glm::vec3(-voidZone, mapY, 5.f))
+			, math::AABB3D(glm::vec3(voidZone, -mapY, -5.f), glm::vec3(voidZone + mapX, mapY, 5.f)) }, 2.f);
+		
 		m_world.addSystem(std::make_unique<systems::PlayerSpawn>(*m_inputs1, *m_inputs2), SystemGroup::Process);
+		m_world.addSystem(std::make_unique<systems::BoundaryGrid>(), SystemGroup::Process);
 		m_world.addSystem(std::make_unique<systems::Physics>(), SystemGroup::Process);
 		m_world.addSystem(std::make_unique<systems::Transforms>(), SystemGroup::Process);
 		m_world.addSystem(std::make_unique<systems::UnitSpawn>(2.f), SystemGroup::Process);
 		m_world.addSystem(std::make_unique <systems::PlayerControl>(), SystemGroup::Process);
-		m_world.addSystem(std::make_unique<systems::MapBoundary>(
-			std::vector{ math::AABB3D(glm::vec3(-40.f), glm::vec3(20.f)) }
-			), SystemGroup::Process);
+		m_world.addSystem(std::make_unique<systems::MapBoundary>(), SystemGroup::Process);
 
 		m_world.getResource<graphics::Camera>().setView(
 			glm::lookAt(glm::vec3(0.f, 0.f, 50.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f)));
 
 		// rendering
 		m_world.addSystem(std::make_unique<systems::MeshDrawing>(), SystemGroup::Draw);
+		m_world.addSystem(std::make_unique<systems::LineDrawing>(), SystemGroup::Draw);
 		m_world.addSystem(std::make_unique<systems::ParticleDrawing>(), SystemGroup::Draw);
 	}
 
