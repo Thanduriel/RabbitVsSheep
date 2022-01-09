@@ -16,7 +16,8 @@ namespace systems {
 		_comps.execute([&](components::Velocity& vel)
 			{
 				constexpr float dampCoef = 0.1f;
-				vel.value *= 1.f - dampCoef * _deltaTime * glm::dot(vel.value, vel.value);
+				const float s = dampCoef * _deltaTime;
+				vel.value *= 1.f - s * std::min(1/s, glm::dot(vel.value, vel.value));
 			});
 
 		// orientation according to velocity
@@ -28,7 +29,6 @@ namespace systems {
 				mat3 rotMat = static_cast<mat3>(rot.value);
 				const vec3 forward = rotMat * vec3(0.f, 1.f, 0.f);
 				const float speed = length(vel.value);
-				spdlog::info("{}", angVel.speed);
 				if (speed > 0.001f)
 				{
 					const vec3 dir = vel.value / speed;
@@ -53,7 +53,7 @@ namespace systems {
 		_comps.execute(operations::ApplyAngularVelocity(_deltaTime));
 		_comps.execute([&](Entity ent, const components::Velocity&)
 			{
-				getComp<components::TransformNeedsUpdate>(_comps).add(ent);
+				getComp<components::TransformNeedsUpdate>(_comps).insert(ent);
 			});
 
 		// rebuild scene graph
@@ -79,7 +79,7 @@ namespace systems {
 				{
 					const Entity oth = el.entity;
 					// do not test colliders of the same entity
-					if (_ent == oth || _collider.type == el.type)
+					if (_ent == oth /*|| _collider.type == el.type*/)
 						return;
 
 					//	HitInfo info;
@@ -101,10 +101,12 @@ namespace systems {
 							if (d >= 0.f)
 							{
 								constexpr float c = 0.5f;
-								const float J = 1.f * 1.f / (1.f + 1.f)
+								const float m1 = _collider.type == CollisionType::Player ? 10.f : 1.f;
+								const float m2 = el.type == CollisionType::Player ? 10.f : 1.f;
+								const float J = m1 * m2 / (m1 + m2)
 									* (1.f + c) * d;
-								_velocity.value -= J / 1.f * normal;
-								velOth.value += J / 1.f * normal;
+								_velocity.value -= J / m1 * normal;
+								velOth.value += J / m2 * normal;
 							}
 						}
 						//	collide |= sphereSphereCollision(_position, r, posOth, rOth);
@@ -112,8 +114,8 @@ namespace systems {
 
 					if (collide)
 					{
-						getComp<comps::TransformNeedsUpdate>(_comps).add(_ent);
-						getComp<comps::TransformNeedsUpdate>(_comps).add(oth);
+						getComp<comps::TransformNeedsUpdate>(_comps).insert(_ent);
+						getComp<comps::TransformNeedsUpdate>(_comps).insert(oth);
 					}
 				};
 				SceneGraph::QueryStructure::IntersectQuery<decltype(resolveCollisions)> query(aabb, resolveCollisions);
